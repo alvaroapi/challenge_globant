@@ -24,7 +24,7 @@ El proyecto también incluye:
 
 1.  **Clonar el repositorio (o descomprimir el archivo .zip):**
     ```bash
-    # git clone <repository_url>
+    # git clone https://github.com/alvaroapi/challenge_globant.git
     cd globant_challenge
     ```
 
