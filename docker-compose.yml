@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-globant_db}
+      - POSTGRES_USER=${POSTGRES_USER:-globant_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-Gl034nt}
+    ports:
+      - "5435:5432" # Expose for local inspection if needed, remove for production
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=${POSTGRES_DB:-globant_db}
+      - POSTGRES_USER=${POSTGRES_USER:-globant_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-Gl034nt}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - DJANGO_SETTINGS_MODULE=globant_challenge.settings
+      - PYTHONUNBUFFERED=1
+      # Add other environment variables if needed
+    depends_on:
+      - db
+    restart: always
+
+    # Add entrypoint script for migrations if preferred over Dockerfile CMD
+    # entrypoint: ["/app/entrypoint.sh"]
+
+volumes:
+  postgres_data:
+
